@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ようこそ - 飯塚e-ats</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+        }
+        .phone-frame {
+            background-color: #111;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+        .phone-screen {
+            width: 414px;
+            height: 800px;
+            border-radius: 30px;
+            overflow: hidden;
+            background-color: #EDF2F4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .login-container {
+            padding: 40px;
+        }
+        .logo {
+            font-size: 42px;
+            font-weight: bold;
+            color: #2B2D42;
+            margin-bottom: 10px;
+        }
+        .logo .highlight {
+            color: #D90429;
+        }
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 50px;
+        }
+        .choice-button {
+            display: block;
+            width: 300px;
+            text-decoration: none;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .choice-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+        }
+        .consumer-btn {
+            background: #D90429;
+        }
+        .restaurant-btn {
+            background: #2B2D42;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <div class="login-container">
+                <h1 class="logo">飯塚e-ats<span class="highlight">（イーツ）</span></h1>
+                <p class="subtitle">飯塚の「うまい！」が見つかる、つながる。</p>
+                
+                <a href="#" class="choice-button consumer-btn">
+                    🍜 お店を探す (消費者の方)
+                </a>
+                <a href="#" class="choice-button restaurant-btn">
+                    📊 売上を管理する (飲食店の方)
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

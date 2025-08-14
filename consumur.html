@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お店を探す - 飯塚e-ats</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+        }
+        .phone-frame {
+            background-color: #111;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+        .phone-screen {
+            width: 414px;
+            height: 800px;
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        :root {
+            --primary-color: #D90429;
+            --secondary-color: #2B2D42;
+            --accent-color: #FFC107;
+            --card-bg-color: #ffffff;
+            --text-color: #2B2D42;
+            --light-text-color: #8D99AE;
+            --background-color: #EDF2F4;
+        }
+
+        .header-gradient {
+            background: linear-gradient(45deg, #FF8E53, #F9D423);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .content-body {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+            background-color: var(--background-color);
+        }
+
+        .sidebar {
+            width: 100%; /* スマホ表示では全幅に */
+            padding: 0 15px;
+            overflow-y: auto;
+        }
+        .sidebar-header h2 {
+            margin: 20px 0 15px 0;
+            font-size: 22px;
+            color: var(--text-color);
+            font-weight: bold;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .shop-list { list-style: none; padding: 0; margin: 0; }
+        .shop-list-item { display: flex; gap: 15px; padding: 15px; border-radius: 12px; cursor: pointer; transition: all 0.2s; background-color: var(--card-bg-color); margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .shop-list-item:hover, .shop-list-item.active { background-color: #e6f7ff; border-color: var(--secondary-color); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+        .shop-list-item img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; }
+        .shop-list-info h3 { margin: 0 0 5px 0; font-size: 17px; color: var(--secondary-color); }
+        .shop-list-info .rating { font-weight: bold; color: var(--accent-color); }
+        .shop-list-info .details { font-size: 14px; color: var(--light-text-color); }
+        
+        .map-area { display: none; } /* PC版のマップはスマホ版では非表示 */
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <header class="header-gradient">飯塚の「うまい！」を探す</header>
+            <div class="content-body">
+                <aside class="sidebar">
+                    <div class="sidebar-header"><h2>お店一覧</h2></div>
+                    <ul class="shop-list" id="shop-list">
+                        </ul>
+                </aside>
+                </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const shopData = {
+                1: { name: 'いいづか酒場', rating: 4.2, genre: '居酒屋・焼き鳥', img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=400' },
+                2: { name: '博多もつ鍋 飯塚店', rating: 4.5, genre: 'もつ鍋・九州料理', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=400' },
+                3: { name: '隠れ家ダイニング 空', rating: 3.8, genre: '創作和食・個室', img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=400' },
+                4: { name: 'ラーメン暖暮 飯塚店', rating: 4.0, genre: 'ラーメン', img: 'https://images.unsplash.com/photo-1568096889942-6eedde68667d?q=80&w=400' }
+            };
+
+            const shopListEl = document.getElementById('shop-list');
+
+            Object.keys(shopData).forEach(id => {
+                const shop = shopData[id];
+                const listItem = document.createElement('li');
+                listItem.className = 'shop-list-item';
+                listItem.dataset.id = id;
+                listItem.innerHTML = `
+                    <img src="${shop.img}" alt="${shop.name}">
+                    <div class="shop-list-info">
+                        <h3>${shop.name}</h3>
+                        <div class="rating">★ ${shop.rating}</div>
+                        <div class="details">${shop.genre}</div>
+                    </div>
+                `;
+                shopListEl.appendChild(listItem);
+
+                listItem.addEventListener('click', () => {
+                    document.querySelectorAll('.shop-list-item.active').forEach(el => el.classList.remove('active'));
+                    listItem.classList.add('active');
+                    alert(`「${shop.name}」の詳細ページへ遷移します（デモ）`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
