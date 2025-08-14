@@ -1,0 +1,188 @@
+:root {
+    --primary-color: #007AFF; /* 明るい青 */
+    --accent-color: #34C759; /* 元気な緑 */
+    --background-color: #F2F2F7; /* 明るい背景グレー */
+    --card-bg-color: #ffffff;
+    --text-color: #1c1c1e;
+    --light-text-color: #8A8A8E;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    margin: 0;
+    padding: 70px 0; /* ヘッダーとフッターの高さ分 */
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(45deg, #007BFF, #00C6FF); /* グラデーションヘッダー */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+main {
+    padding: 15px;
+}
+
+.card {
+    background-color: var(--card-bg-color);
+    border-radius: 18px; /* 角をさらに丸く */
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08); /* 影を少し強調 */
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    text-align: center;
+}
+
+.summary-item h3 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--light-text-color);
+}
+
+.summary-item p {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.chart-container {
+    margin-top: 20px;
+}
+
+/* 経費入力フォーム */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #E5E5EA;
+    border-radius: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background-color: #F2F2F7;
+}
+.form-group input:focus {
+    outline: 2px solid var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+
+.category-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.category-button {
+    padding: 12px;
+    font-size: 14px;
+    border: 2px solid var(--background-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-radius: 20px; /* まるいボタン */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.category-button.selected {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.submit-button {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
+    transition: all 0.2s ease;
+}
+
+.submit-button:active {
+    transform: scale(0.98); /* 押した感じを出す */
+    box-shadow: 0 2px 6px rgba(52, 199, 89, 0.4);
+}
+
+/* レポート画面 */
+.report-section h3 {
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+    margin-top: 30px;
+}
+.expense-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 10px;
+    border-bottom: 1px solid #E5E5EA;
+}
+.expense-list-item:last-child {
+    border-bottom: none;
+}
+
+/* フッターナビゲーション */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background-color: rgba(255, 255, 255, 0.85); /* 半透明 */
+    backdrop-filter: blur(10px); /* すりガラス効果 */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 1px solid #E5E5EA;
+    z-index: 10;
+}
+
+.bottom-nav button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: var(--light-text-color);
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.bottom-nav button.active {
+    color: var(--primary-color);
+    font-weight: 700;
+}
