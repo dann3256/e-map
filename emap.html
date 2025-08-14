@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>飯塚e-帳簿</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #007AFF;
+            --accent-color: #34C759;
+            --background-color: #e9eef2;
+            --card-bg-color: #ffffff;
+            --text-color: #1c1c1e;
+            --light-text-color: #8A8A8E;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            margin: 0;
+            background-color: var(--background-color);
+        }
+
+        .phone-wrapper {
+            width: 414px;
+            height: 800px;
+            background-color: #f9f9f9;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            border: 10px solid #111;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            width: 100%;
+            background: linear-gradient(45deg, #007BFF, #00C6FF);
+            color: white;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+            box-sizing: border-box;
+            padding: 15px 20px;
+            flex-shrink: 0;
+        }
+
+        main {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #F2F2F7;
+        }
+
+        .bottom-nav {
+            width: 100%;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #E5E5EA;
+            z-index: 10;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        }
+
+        .card {
+            background-color: var(--card-bg-color);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .summary-item h3 {
+            margin: 0 0 5px 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--light-text-color);
+        }
+
+        .summary-item p {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #E5E5EA;
+            border-radius: 12px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #F2F2F7;
+        }
+
+        .category-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .category-button {
+            padding: 12px;
+            font-size: 14px;
+            border: 2px solid var(--background-color);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .category-button.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        .submit-button:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 6px rgba(52, 199, 89, 0.4);
+        }
+
+        .expense-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 10px;
+            border-bottom: 1px solid #E5E5EA;
+        }
+
+        .bottom-nav button {
+            background: none;
+            border: none;
+            font-size: 14px;
+            color: var(--light-text-color);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .bottom-nav button.active {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-wrapper">
+        <header>
+            <h1 id="header-title">ダッシュボード</h1>
+        </header>
+
+        <main id="app-container">
+            </main>
+
+        <nav class="bottom-nav">
+            <button id="nav-dashboard" class="active">🏠 ホーム</button>
+            <button id="nav-add-expense">✍️ 経費入力</button>
+            <button id="nav-report">📊 レポート</button>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let state = {
+                currentView: 'dashboard',
+                sales: { month: 350000 },
+                expenses: [],
+                selectedCategory: null
+            };
+
+            const appContainer = document.getElementById('app-container');
+            const headerTitle = document.getElementById('header-title');
+            const navButtons = {
+                dashboard: document.getElementById('nav-dashboard'),
+                addExpense: document.getElementById('nav-add-expense'),
+                report: document.getElementById('nav-report')
+            };
+            
+            function saveData() {
+                localStorage.setItem('appState', JSON.stringify(state));
+            }
+
+            function loadData() {
+                const savedState = localStorage.getItem('appState');
+                if (savedState) {
+                    state = JSON.parse(savedState);
+                } else {
+                    state.expenses = [
+                        { date: '2025-08-10', amount: 32000, category: '材料費', memo: '野菜と肉' },
+                        { date: '2025-08-12', amount: 15000, category: '水道・光熱費', memo: '電気代' },
+                        { date: '2025-08-14', amount: 80000, category: '家賃', memo: '8月分' },
+                    ];
+                }
+            }
+
+            function renderDashboard() {
+                const totalExpenses = state.expenses.reduce((sum, item) => sum + item.amount, 0);
+                const profit = state.sales.month - totalExpenses;
+
+                appContainer.innerHTML = `
+                    <div class="card">
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <h3>今月の売上</h3>
+                                <p>¥${state.sales.month.toLocaleString()}</p>
+                            </div>
+                            <div class="summary-item">
+                                <h3>今月の経費</h3>
+                                <p>¥${totalExpenses.toLocaleString()}</p>
+                            </div>
+                        </div>
+                        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+                        <div class="summary-item" style="grid-column: 1 / -1;">
+                            <h3>現在の利益</h3>
+                            <p style="color: ${profit > 0 ? '#34C759' : '#FF3B30'}; font-size: 32px;">¥${profit.toLocaleString()}</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>利益の推移（イメージ）</h3>
+                        <div class="chart-container">
+                            <canvas id="profitChart"></canvas>
+                        </div>
+                    </div>
+                `;
+                
+                const ctx = document.getElementById('profitChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['5月', '6月', '7月', '8月'],
+                        datasets: [{
+                            label: '利益 (円)',
+                            data: [120000, 190000, 150000, profit],
+                            backgroundColor: 'rgba(0, 122, 255, 0.7)',
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+
+            function renderAddExpenseForm() {
+                const categories = ['材料費', '人件費', '家賃', '水道・光熱費', '広告費', 'その他'];
+                
+                appContainer.innerHTML = `
+                    <div class="card">
+                        <form id="expense-form">
+                            <div class="form-group">
+                                <label for="amount">金額（円）</label>
+                                <input type="number" id="amount" placeholder="例: 3500" required>
+                            </div>
+                            <div class="form-group">
+                                <label>費用の種類</label>
+                                <div class="category-buttons">
+                                    ${categories.map(cat => `<button type="button" class="category-button" data-category="${cat}">${cat}</button>`).join('')}
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label for="date">日付</label>
+                                <input type="date" id="date" value="${new Date().toISOString().slice(0,10)}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="memo">メモ（任意）</label>
+                                <input type="text" id="memo" placeholder="例: キャベツ、豚肉">
+                            </div>
+                            <button type="submit" class="submit-button">この内容で登録する</button>
+                        </form>
+                    </div>
+                `;
+
+                document.querySelectorAll('.category-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('selected'));
+                        e.target.classList.add('selected');
+                        state.selectedCategory = e.target.dataset.category;
+                    });
+                });
+
+                document.getElementById('expense-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const amount = parseInt(document.getElementById('amount').value);
+                    const date = document.getElementById('date').value;
+                    const memo = document.getElementById('memo').value;
+
+                    if (!amount || !state.selectedCategory || !date) {
+                        alert('金額、費用の種類、日付は必須です。');
+                        return;
+                    }
+
+                    state.expenses.push({ date, amount, category: state.selectedCategory, memo });
+                    state.selectedCategory = null;
+                    saveData();
+                    alert('経費を登録しました！');
+                    
+                    navigate('dashboard');
+                });
+            }
+
+            function renderReport() {
+                const totalExpenses = state.expenses.reduce((sum, item) => sum + item.amount, 0);
+                
+                const expensesByCategory = state.expenses.reduce((acc, item) => {
+                    acc[item.category] = (acc[item.category] || 0) + item.amount;
+                    return acc;
+                }, {});
+
+                appContainer.innerHTML = `
+                    <div class="card">
+                        <h3>月次サマリー（2025年8月）</h3>
+                        <div class="expense-list">
+                            <div class="expense-list-item"><span>売上合計</span><strong>¥${state.sales.month.toLocaleString()}</strong></div>
+                            <div class="expense-list-item"><span>経費合計</span><strong>¥${totalExpenses.toLocaleString()}</strong></div>
+                            <div class="expense-list-item"><span>利益</span><strong style="font-size: 1.2em; color: var(--primary-color);">¥${(state.sales.month - totalExpenses).toLocaleString()}</strong></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>経費の内訳</h3>
+                        <div class="expense-list">
+                            ${Object.entries(expensesByCategory).map(([category, amount]) => `
+                                <div class="expense-list-item">
+                                    <span>${category}</span>
+                                    <strong>¥${amount.toLocaleString()}</strong>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                     <div class="card">
+                        <h3>確定申告用データ出力</h3>
+                        <p style="font-size: 14px; color: #555;">年間のデータを会計ソフトに取り込める形式（CSV）でダウンロードできます。</p>
+                        <button id="export-csv" class="submit-button" style="background-color: var(--primary-color); box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);">CSVをダウンロード</button>
+                    </div>
+                `;
+                
+                document.getElementById('export-csv').addEventListener('click', exportCSV);
+            }
+            
+            function exportCSV() {
+                let csvContent = "data:text/csv;charset=utf-8,日付,勘定科目,摘要,支払金額\n";
+                state.expenses.forEach(item => {
+                    csvContent += `${item.date},${item.category},${item.memo},${item.amount}\n`;
+                });
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "iizuka_e-chobo_data.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                alert('CSVファイルをダウンロードしました。');
+            }
+
+            function navigate(view) {
+                state.currentView = view;
+                updateView();
+                window.scrollTo(0, 0);
+            }
+
+            function updateView() {
+                Object.values(navButtons).forEach(button => button.classList.remove('active'));
+
+                switch (state.currentView) {
+                    case 'addExpense':
+                        headerTitle.textContent = '経費の入力';
+                        navButtons.addExpense.classList.add('active');
+                        renderAddExpenseForm();
+                        break;
+                    case 'report':
+                        headerTitle.textContent = 'レポートと申告';
+                        navButtons.report.classList.add('active');
+                        renderReport();
+                        break;
+                    case 'dashboard':
+                    default:
+                        headerTitle.textContent = 'ダッシュボード';
+                        navButtons.dashboard.classList.add('active');
+                        renderDashboard();
+                        break;
+                }
+            }
+
+            navButtons.dashboard.addEventListener('click', () => navigate('dashboard'));
+            navButtons.addExpense.addEventListener('click', () => navigate('addExpense'));
+            navButtons.report.addEventListener('click', () => navigate('report'));
+
+            loadData();
+            updateView();
+        });
+    </script>
+
+</body>
+</html>
