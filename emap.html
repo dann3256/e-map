@@ -8,13 +8,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        /* CSS: ポップなデザインとスマホ固定レイアウト */
         :root {
-            --primary-color: #007AFF;
-            --accent-color: #34C759;
-            --background-color: #e9eef2;
+            --primary-color: #FF6B6B; /* 明るいコーラルレッド */
+            --secondary-color: #4ECDC4; /* 爽やかなティールグリーン */
+            --accent-color: #FFD93D; /* 元気なイエロー */
+            --background-color: #F7F9FB;
             --card-bg-color: #ffffff;
-            --text-color: #1c1c1e;
-            --light-text-color: #8A8A8E;
+            --text-color: #333;
+            --light-text-color: #888;
         }
 
         body {
@@ -24,15 +26,15 @@
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
             margin: 0;
-            background-color: var(--background-color);
+            background-color: #D3E0EA;
         }
 
         .phone-wrapper {
             width: 414px;
             height: 800px;
-            background-color: #f9f9f9;
+            background-color: var(--background-color);
             border-radius: 40px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
             border: 10px solid #111;
             position: relative;
             overflow: hidden;
@@ -42,155 +44,136 @@
 
         header {
             width: 100%;
-            background: linear-gradient(45deg, #007BFF, #00C6FF);
+            background: linear-gradient(45deg, var(--primary-color), #FF8E53);
             color: white;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             z-index: 10;
             box-sizing: border-box;
             padding: 15px 20px;
             flex-shrink: 0;
+            border-bottom: 3px solid var(--accent-color);
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
         }
 
         main {
             flex-grow: 1;
-            padding: 15px;
+            padding: 20px;
             overflow-y: auto;
-            background-color: #F2F2F7;
         }
+        /* スクロールバーのデザインを少しだけモダンに */
+        main::-webkit-scrollbar { width: 6px; }
+        main::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        main::-webkit-scrollbar-track { background: transparent; }
 
         .bottom-nav {
             width: 100%;
-            height: 60px;
-            background-color: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
+            height: 65px; /* 少し高くして押しやすく */
+            background-color: #fff;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid #E5E5EA;
+            border-top: 1px solid #eee;
             z-index: 10;
             box-sizing: border-box;
             flex-shrink: 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
         }
+        
+        .nav-button {
+            background: none; border: none; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center;
+            color: var(--light-text-color); font-size: 11px; font-weight: 600;
+            padding: 5px; transition: all 0.2s ease;
+        }
+        .nav-button-icon { font-size: 24px; }
+        .nav-button.active { color: var(--primary-color); transform: translateY(-3px); }
+
 
         .card {
             background-color: var(--card-bg-color);
-            border-radius: 18px;
+            border-radius: 20px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border: 1px solid #eee;
+        }
+        
+        .card-title {
+            margin: -5px 0 15px 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-color);
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
         }
 
-        .summary-grid {
+        .kpi-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 20px;
             text-align: center;
         }
 
-        .summary-item h3 {
+        .kpi-item h3 {
             margin: 0 0 5px 0;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: 600;
             color: var(--light-text-color);
         }
 
-        .summary-item p {
+        .kpi-item p {
             margin: 0;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 700;
             color: var(--primary-color);
         }
+        .kpi-item p .unit { font-size: 14px; margin-left: 2px; color: var(--text-color); }
+        .kpi-item .sub-text { font-size: 12px; color: #4CAF50; }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #E5E5EA;
-            border-radius: 12px;
-            font-size: 16px;
-            box-sizing: border-box;
-            background-color: #F2F2F7;
-        }
-
-        .category-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-        }
-
-        .category-button {
-            padding: 12px;
-            font-size: 14px;
-            border: 2px solid var(--background-color);
-            background-color: var(--background-color);
-            color: var(--text-color);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-weight: 600;
-        }
-
-        .category-button.selected {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-
-        .submit-button {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
-            transition: all 0.2s ease;
-        }
-
-        .submit-button:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 6px rgba(52, 199, 89, 0.4);
-        }
-
-        .expense-list-item {
+        .ranking-list .item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 15px 10px;
-            border-bottom: 1px solid #E5E5EA;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
-
-        .bottom-nav button {
-            background: none;
-            border: none;
-            font-size: 14px;
-            color: var(--light-text-color);
+        .ranking-list .item:last-child { border-bottom: none; }
+        .ranking-list .rank { font-size: 20px; font-weight: bold; color: var(--accent-color); width: 40px; }
+        .ranking-list .name { flex-grow: 1; font-weight: 600; }
+        .ranking-list .value { font-size: 16px; font-weight: 700; color: var(--secondary-color); }
+        
+        .button {
+            display: block; width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--secondary-color), #6EE7B7);
+            color: white; border: none; border-radius: 15px;
+            font-size: 16px; font-weight: 700; text-align: center;
             cursor: pointer;
-            padding: 10px;
-            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
             transition: all 0.2s ease;
-            font-weight: 500;
         }
+        .button:active { transform: translateY(2px); box-shadow: 0 2px 5px rgba(78, 205, 196, 0.4); }
 
-        .bottom-nav button.active {
-            color: var(--primary-color);
-            font-weight: 700;
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #555;}
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px; box-sizing: border-box;
+            background-color: #f5f5f5;
+            transition: border-color 0.2s;
         }
+        .form-group input:focus, .form-group select:focus {
+            outline: none; border-color: var(--secondary-color);
+        }
+        
     </style>
 </head>
 <body>
@@ -203,246 +186,185 @@
             </main>
 
         <nav class="bottom-nav">
-            <button id="nav-dashboard" class="active">🏠 ホーム</button>
-            <button id="nav-add-expense">✍️ 経費入力</button>
-            <button id="nav-report">📊 レポート</button>
+            <button id="nav-dashboard" class="nav-button active">
+                <span class="nav-button-icon">📊</span>
+                <span>ダッシュボード</span>
+            </button>
+            <button id="nav-report" class="nav-button">
+                <span class="nav-button-icon">📄</span>
+                <span>確定申告</span>
+            </button>
+            <button id="nav-settings" class="nav-button">
+                <span class="nav-button-icon">⚙️</span>
+                <span>設定</span>
+            </button>
         </nav>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            let state = {
+            // --- アプリケーションの状態管理 ---
+            const state = {
                 currentView: 'dashboard',
-                sales: { month: 350000 },
-                expenses: [],
-                selectedCategory: null
             };
 
+            // --- DOM要素の取得 ---
             const appContainer = document.getElementById('app-container');
             const headerTitle = document.getElementById('header-title');
             const navButtons = {
                 dashboard: document.getElementById('nav-dashboard'),
-                addExpense: document.getElementById('nav-add-expense'),
-                report: document.getElementById('nav-report')
+                report: document.getElementById('nav-report'),
+                settings: document.getElementById('nav-settings')
             };
-            
-            function saveData() {
-                localStorage.setItem('appState', JSON.stringify(state));
-            }
 
-            function loadData() {
-                const savedState = localStorage.getItem('appState');
-                if (savedState) {
-                    state = JSON.parse(savedState);
-                } else {
-                    state.expenses = [
-                        { date: '2025-08-10', amount: 32000, category: '材料費', memo: '野菜と肉' },
-                        { date: '2025-08-12', amount: 15000, category: '水道・光熱費', memo: '電気代' },
-                        { date: '2025-08-14', amount: 80000, category: '家賃', memo: '8月分' },
-                    ];
-                }
-            }
+            // --- 画面描画関数 ---
 
+            // 1. ダッシュボード画面
             function renderDashboard() {
-                const totalExpenses = state.expenses.reduce((sum, item) => sum + item.amount, 0);
-                const profit = state.sales.month - totalExpenses;
-
+                headerTitle.textContent = '📊 ダッシュボード';
                 appContainer.innerHTML = `
                     <div class="card">
-                        <div class="summary-grid">
-                            <div class="summary-item">
-                                <h3>今月の売上</h3>
-                                <p>¥${state.sales.month.toLocaleString()}</p>
+                        <h2 class="card-title">今月の売上</h2>
+                        <div class="kpi-grid">
+                            <div class="kpi-item">
+                                <h3>売上総額</h3>
+                                <p>485,500 <span class="unit">円</span></p>
+                                <p class="sub-text">↑ 前月比 +15%</p>
                             </div>
-                            <div class="summary-item">
-                                <h3>今月の経費</h3>
-                                <p>¥${totalExpenses.toLocaleString()}</p>
+                            <div class="kpi-item">
+                                <h3>客単価</h3>
+                                <p>1,280 <span class="unit">円</span></p>
+                                <p class="sub-text">↑ 前月比 +5%</p>
                             </div>
-                        </div>
-                        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-                        <div class="summary-item" style="grid-column: 1 / -1;">
-                            <h3>現在の利益</h3>
-                            <p style="color: ${profit > 0 ? '#34C759' : '#FF3B30'}; font-size: 32px;">¥${profit.toLocaleString()}</p>
                         </div>
                     </div>
+
                     <div class="card">
-                        <h3>利益の推移（イメージ）</h3>
-                        <div class="chart-container">
-                            <canvas id="profitChart"></canvas>
+                        <h2 class="card-title">売上推移</h2>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">人気商品ランキング</h2>
+                        <div class="ranking-list">
+                            <div class="item"><span class="rank">🥇</span><span class="name">特製チャンポン</span><span class="value">150 食</span></div>
+                            <div class="item"><span class="rank">🥈</span><span class="name">焼きギョーザ</span><span class="value">125 食</span></div>
+                            <div class="item"><span class="rank">🥉</span><span class="name">からあげ定食</span><span class="value">98 食</span></div>
                         </div>
                     </div>
                 `;
-                
-                const ctx = document.getElementById('profitChart').getContext('2d');
+                // Chart.jsでグラフを描画
+                const ctx = document.getElementById('salesChart').getContext('2d');
                 new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['5月', '6月', '7月', '8月'],
+                        labels: ['第1週', '第2週', '第3週', '第4週'],
                         datasets: [{
-                            label: '利益 (円)',
-                            data: [120000, 190000, 150000, profit],
-                            backgroundColor: 'rgba(0, 122, 255, 0.7)',
+                            label: '週間売上',
+                            data: [110000, 135000, 105000, 135500],
+                            backgroundColor: 'rgba(78, 205, 196, 0.7)',
                             borderRadius: 8
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            y: { beginAtZero: true }
-                        }
-                    }
+                    options: { responsive: true, plugins: { legend: { display: false } } }
                 });
             }
 
-            function renderAddExpenseForm() {
-                const categories = ['材料費', '人件費', '家賃', '水道・光熱費', '広告費', 'その他'];
-                
-                appContainer.innerHTML = `
-                    <div class="card">
-                        <form id="expense-form">
-                            <div class="form-group">
-                                <label for="amount">金額（円）</label>
-                                <input type="number" id="amount" placeholder="例: 3500" required>
-                            </div>
-                            <div class="form-group">
-                                <label>費用の種類</label>
-                                <div class="category-buttons">
-                                    ${categories.map(cat => `<button type="button" class="category-button" data-category="${cat}">${cat}</button>`).join('')}
-                                </div>
-                            </div>
-                             <div class="form-group">
-                                <label for="date">日付</label>
-                                <input type="date" id="date" value="${new Date().toISOString().slice(0,10)}" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="memo">メモ（任意）</label>
-                                <input type="text" id="memo" placeholder="例: キャベツ、豚肉">
-                            </div>
-                            <button type="submit" class="submit-button">この内容で登録する</button>
-                        </form>
-                    </div>
-                `;
-
-                document.querySelectorAll('.category-button').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        document.querySelectorAll('.category-button').forEach(btn => btn.classList.remove('selected'));
-                        e.target.classList.add('selected');
-                        state.selectedCategory = e.target.dataset.category;
-                    });
-                });
-
-                document.getElementById('expense-form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const amount = parseInt(document.getElementById('amount').value);
-                    const date = document.getElementById('date').value;
-                    const memo = document.getElementById('memo').value;
-
-                    if (!amount || !state.selectedCategory || !date) {
-                        alert('金額、費用の種類、日付は必須です。');
-                        return;
-                    }
-
-                    state.expenses.push({ date, amount, category: state.selectedCategory, memo });
-                    state.selectedCategory = null;
-                    saveData();
-                    alert('経費を登録しました！');
-                    
-                    navigate('dashboard');
-                });
-            }
-
+            // 2. 確定申告画面
             function renderReport() {
-                const totalExpenses = state.expenses.reduce((sum, item) => sum + item.amount, 0);
-                
-                const expensesByCategory = state.expenses.reduce((acc, item) => {
-                    acc[item.category] = (acc[item.category] || 0) + item.amount;
-                    return acc;
-                }, {});
-
+                headerTitle.textContent = '📄 確定申告';
                 appContainer.innerHTML = `
                     <div class="card">
-                        <h3>月次サマリー（2025年8月）</h3>
-                        <div class="expense-list">
-                            <div class="expense-list-item"><span>売上合計</span><strong>¥${state.sales.month.toLocaleString()}</strong></div>
-                            <div class="expense-list-item"><span>経費合計</span><strong>¥${totalExpenses.toLocaleString()}</strong></div>
-                            <div class="expense-list-item"><span>利益</span><strong style="font-size: 1.2em; color: var(--primary-color);">¥${(state.sales.month - totalExpenses).toLocaleString()}</strong></div>
+                        <h2 class="card-title">確定申告資料の作成</h2>
+                        <div class="form-group">
+                            <label for="year-select">対象年度を選択してください</label>
+                            <select id="year-select">
+                                <option>2025年</option>
+                                <option>2024年</option>
+                                <option>2023年</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="card">
-                        <h3>経費の内訳</h3>
-                        <div class="expense-list">
-                            ${Object.entries(expensesByCategory).map(([category, amount]) => `
-                                <div class="expense-list-item">
-                                    <span>${category}</span>
-                                    <strong>¥${amount.toLocaleString()}</strong>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                     <div class="card">
-                        <h3>確定申告用データ出力</h3>
-                        <p style="font-size: 14px; color: #555;">年間のデータを会計ソフトに取り込める形式（CSV）でダウンロードできます。</p>
-                        <button id="export-csv" class="submit-button" style="background-color: var(--primary-color); box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);">CSVをダウンロード</button>
+                        <p style="font-size:13px; color:#555; text-align:center; margin-bottom:20px;">
+                            選択した年度の売上データと経費データを集計し、<br>会計ソフト用のCSVファイルを生成します。
+                        </p>
+                        <button class="button" onclick="alert('2025年分のCSVファイルをダウンロードします（デモ）')">
+                            CSVをダウンロード
+                        </button>
                     </div>
                 `;
-                
-                document.getElementById('export-csv').addEventListener('click', exportCSV);
+            }
+
+            // 3. 設定画面
+            function renderSettings() {
+                headerTitle.textContent = '⚙️ 設定';
+                appContainer.innerHTML = `
+                    <div class="card">
+                        <h2 class="card-title">POSレジ連携</h2>
+                        <div class="form-group">
+                            <label for="pos-select">お使いのPOSレジ</label>
+                            <select id="pos-select">
+                                <option>Airレジ</option>
+                                <option>スマレジ</option>
+                                <option>その他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="api-key">APIキー</label>
+                            <input type="password" id="api-key" value="abcdefg1234567">
+                        </div>
+                        <button class="button" onclick="alert('POSレジの設定を保存しました！')">
+                           設定を保存
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">お店の情報</h2>
+                        <div class="form-group">
+                            <label for="shop-name">店名</label>
+                            <input type="text" id="shop-name" value="いいづか食堂">
+                        </div>
+                        <button class="button" onclick="alert('お店の情報を保存しました！')">
+                           情報を更新
+                        </button>
+                    </div>
+                `;
             }
             
-            function exportCSV() {
-                let csvContent = "data:text/csv;charset=utf-8,日付,勘定科目,摘要,支払金額\n";
-                state.expenses.forEach(item => {
-                    csvContent += `${item.date},${item.category},${item.memo},${item.amount}\n`;
-                });
-                
-                const encodedUri = encodeURI(csvContent);
-                const link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "iizuka_e-chobo_data.csv");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                alert('CSVファイルをダウンロードしました。');
-            }
-
+            // --- ナビゲーション制御 ---
             function navigate(view) {
                 state.currentView = view;
                 updateView();
-                window.scrollTo(0, 0);
             }
 
             function updateView() {
+                // 全てのボタンからアクティブクラスを削除
                 Object.values(navButtons).forEach(button => button.classList.remove('active'));
 
                 switch (state.currentView) {
-                    case 'addExpense':
-                        headerTitle.textContent = '経費の入力';
-                        navButtons.addExpense.classList.add('active');
-                        renderAddExpenseForm();
-                        break;
                     case 'report':
-                        headerTitle.textContent = 'レポートと申告';
                         navButtons.report.classList.add('active');
                         renderReport();
                         break;
+                    case 'settings':
+                        navButtons.settings.classList.add('active');
+                        renderSettings();
+                        break;
                     case 'dashboard':
                     default:
-                        headerTitle.textContent = 'ダッシュボード';
                         navButtons.dashboard.classList.add('active');
                         renderDashboard();
                         break;
                 }
             }
 
+            // --- イベントリスナーの設定 ---
             navButtons.dashboard.addEventListener('click', () => navigate('dashboard'));
-            navButtons.addExpense.addEventListener('click', () => navigate('addExpense'));
             navButtons.report.addEventListener('click', () => navigate('report'));
+            navButtons.settings.addEventListener('click', () => navigate('settings'));
 
-            loadData();
+            // --- アプリケーションの初期化 ---
             updateView();
         });
     </script>
-
 </body>
 </html>
