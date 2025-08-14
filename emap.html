@@ -187,15 +187,15 @@
 
         <nav class="bottom-nav">
             <button id="nav-dashboard" class="nav-button active">
-                <span class="nav-button-icon">📊</span>
+                <span class="nav-button-icon"></span>
                 <span>ダッシュボード</span>
             </button>
             <button id="nav-report" class="nav-button">
-                <span class="nav-button-icon">📄</span>
+                <span class="nav-button-icon"></span>
                 <span>確定申告</span>
             </button>
             <button id="nav-settings" class="nav-button">
-                <span class="nav-button-icon">⚙️</span>
+                <span class="nav-button-icon"></span>
                 <span>設定</span>
             </button>
         </nav>
@@ -221,7 +221,7 @@
 
             // 1. ダッシュボード画面
             function renderDashboard() {
-                headerTitle.textContent = '📊 ダッシュボード';
+                headerTitle.textContent = 'ダッシュボード';
                 appContainer.innerHTML = `
                     <div class="card">
                         <h2 class="card-title">今月の売上</h2>
@@ -272,7 +272,7 @@
 
             // 2. 確定申告画面
             function renderReport() {
-                headerTitle.textContent = '📄 確定申告';
+                headerTitle.textContent = ' 確定申告';
                 appContainer.innerHTML = `
                     <div class="card">
                         <h2 class="card-title">確定申告資料の作成</h2>
@@ -296,7 +296,7 @@
 
             // 3. 設定画面
             function renderSettings() {
-                headerTitle.textContent = '⚙️ 設定';
+                headerTitle.textContent = ' 設定';
                 appContainer.innerHTML = `
                     <div class="card">
                         <h2 class="card-title">POSレジ連携</h2>
